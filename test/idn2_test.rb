@@ -2,12 +2,24 @@
 
 require "test_helper"
 
-  def test_that_it_has_a_version_number
-    refute_nil ::Ruby::Idn2::VERSION
-  end
 class Idn2Test < Minitest::Test
+  def test_convert
+    idnname = Idn2.convert("bücher.ch")
 
-  def test_it_does_something_useful
-    assert false
+    assert idnname == "xn--bcher-kva.ch"
+  end
+
+  def test_convert_ascii
+    idnname = Idn2.convert("google.ch")
+
+    assert idnname == "google.ch"
+  end
+
+  def test_convert_error
+    error_pattern = /domain name longer than/
+    error = assert_raises(Idn2::Error) do
+      Idn2.convert("ü" * 2000)
+    end
+    assert error_pattern =~ error.message, "expect \"#{error.message}\" to contain \"#{error_pattern}\""
   end
 end
