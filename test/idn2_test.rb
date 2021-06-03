@@ -6,13 +6,13 @@ class Idn2Test < Minitest::Test
   def test_convert
     idnname = Idn2.convert("bücher.ch")
 
-    assert idnname == "xn--bcher-kva.ch"
+    assert idnname == "xn--bcher-kva.ch", "waiting for idn version, instead got '#{idnname}'"
   end
 
   def test_convert_ascii
     idnname = Idn2.convert("google.ch")
 
-    assert idnname == "google.ch"
+    assert idnname == "google.ch", "waiting for 'google.ch', instead got '#{idnname}'"
   end
 
   def test_convert_error
