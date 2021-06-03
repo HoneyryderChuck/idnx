@@ -62,6 +62,7 @@ module Idn2
 
       attach_function :idn2_lookup_ul, [:string, :pointer, :int], :int
       attach_function :idn2_strerror, [:int], :string
+      attach_function :idn2_free, [:pointer], :void
 
       def self.lookup(hostname)
         string_ptr = FFI::MemoryPointer.new(:pointer)
@@ -80,7 +81,12 @@ module Idn2
 
         raise Error, "Failed to read \"#{hostname}\" to ascii" if ptr.null?
 
-        ptr.read_string
+        ascii = ptr.read_string
+
+        idn2_free(ptr)
+        string_ptr.free
+
+        ascii
       end
     end
   end

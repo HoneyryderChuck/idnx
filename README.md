@@ -22,6 +22,11 @@ Or install it yourself as:
 
 ## Usage
 
+Make sure you have `libidn2` installed in your system:
+
+* Mac OS: `brew install libidn2`
+* Debian: `apt-get install idn2`
+
 TODO: Write usage instructions here
 
 ## Development
