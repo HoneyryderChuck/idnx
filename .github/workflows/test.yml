@@ -31,7 +31,7 @@ jobs:
 
       - name: install libidn2
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get install -y --no-install-recommends idn2 && sudo /sbin/ldconfig -v
+        run: sudo apt-get install -y --no-install-recommends libidn2
 
       - name: install libidn2
         if: matrix.os == 'macos-latest'

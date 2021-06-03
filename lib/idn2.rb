@@ -12,6 +12,7 @@ module Idn2
 
     if FFI::Platform.windows?
       ffi_lib "Normaliz.dll"
+      ffi_lib "kernel32.dll"
 
       IDN_MAX_LENGTH = 255
 
@@ -22,7 +23,6 @@ module Idn2
       #   LPWSTR  lpASCIICharStr,
       #   int     cchASCIIChar
       # );
-
       attach_function :IdnToAscii, [:uint, :string, :int, :pointer, :int], :int
       attach_function :GetLastError, [], :int
 
@@ -41,11 +41,7 @@ module Idn2
         read_pointer.read_string(result)
       end
     else
-      if FFI::Platform.mac?
-        ffi_lib "libidn2"
-      else
-        ffi_lib "idn2"
-      end
+      ffi_lib "libidn2"
 
       attach_function :idn2_check_version, [], :int
 
