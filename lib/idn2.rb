@@ -23,8 +23,8 @@ module Idn2
       #   int     cchASCIIChar
       # );
 
-      attach_function :IdnToAscii, [:uint, :string, :int, :pointer, :int], :integer
-      attach_function :GetLastError, [], :integer
+      attach_function :IdnToAscii, [:uint, :string, :int, :pointer, :int], :int
+      attach_function :GetLastError, [], :int
 
       # attach_function :curl_win32_idn_to_ascii, [:string,  :int], :int
 
