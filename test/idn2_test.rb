@@ -16,7 +16,7 @@ class Idn2Test < Minitest::Test
   end
 
   def test_convert_error
-    error_pattern = /domain name longer than/
+    error_pattern = FFI::Platform.windows? ? /invalid name was supplied/ : /domain name longer than/
     error = assert_raises(Idn2::Error) do
       Idn2.convert("ü" * 2000)
     end

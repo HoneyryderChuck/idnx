@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative "idn2/version"
-
 require "ffi"
 
 module Idn2
@@ -18,6 +17,12 @@ module Idn2
 
       IDN_MAX_LENGTH = 255
       MB_ERR_INVALID_CHARS = 0x00000008
+
+      ERROR_INSUFFICIENT_BUFFER = 0x7A
+      ERROR_INVALID_FLAGS = 0x3EC
+      ERROR_INVALID_NAME = 0x7B
+      ERROR_INVALID_PARAMETER = 0x57
+      ERROR_NO_UNICODE_TRANSLATION = 0x459
 
       # int IdnToAscii(
       #   DWORD   dwFlags,
@@ -46,81 +51,57 @@ module Idn2
       #   LPCCH                              lpDefaultChar,
       #   LPBOOL                             lpUsedDefaultChar
       # );
-      attach_function :IdnToAscii, [:uint, :string, :int, :pointer, :int], :int
-      attach_function :GetLastError, [], :int
+      attach_function :IdnToAscii, [:uint, :pointer, :int, :pointer, :int], :int
       attach_function :MultiByteToWideChar, [:uint, :uint, :string, :int, :pointer, :int], :int
-      attach_function :WideCharToMultiByte, [:uint, :uint, :string, :int, :pointer, :int, :pointer, :pointer], :int
+      attach_function :WideCharToMultiByte, [:uint, :uint, :pointer, :int, :pointer, :int, :pointer, :pointer], :int
 
       def self.lookup(hostname)
-        puts "1: #{hostname.inspect}"
-        wchar_hostname = utf8_to_wchar(hostname)
+        # turn to wchar
+        wchar_len = MultiByteToWideChar(WIN32OLE::CP_UTF8, MB_ERR_INVALID_CHARS, hostname, -1, nil, 0)
+        raise Error, "Failed to convert \"#{hostname}\" to wchar" if wchar_len.zero?
+        wchar_ptr = FFI::MemoryPointer.new(:wchar_t, wchar_len)
+        wchar_len = MultiByteToWideChar(WIN32OLE::CP_UTF8, 0, hostname, -1, wchar_ptr, wchar_len)
+        raise Error, "Failed to convert \"#{hostname}\" to wchar" if wchar_len.zero?
 
-        puts "2: #{wchar_hostname.inspect}"
-        raise Error, "Failed to convert \"#{hostname}\" to wchar" unless wchar_hostname
-
-        string_ptr = FFI::MemoryPointer.new(:wchar_t, IDN_MAX_LENGTH)
-        len = IdnToAscii(0, wchar_hostname, -1, string_ptr, IDN_MAX_LENGTH)
-
-        if len == 0
-          last_error = GetLastError()
-          raise Error, "Failed to convert \"#{hostname}\" to ascii; (error: #{last_error})"
-        end
-
-        punycode = string_ptr.read_string(len * 2)
-        puts "3: #{punycode.inspect}"
-        string_ptr.free
-
-        ascii = wchar_to_utf8(punycode)
-
-        puts "4: #{ascii.inspect}"
-        raise Error, "Failed to convert \"#{ascii}\" to utf8" unless ascii
-
-        ascii
-      end
-
-      def self.utf8_to_wchar(string)
-        len = MultiByteToWideChar(WIN32OLE::CP_UTF8, MB_ERR_INVALID_CHARS, string, -1, nil, 0)
-
-        return if len.zero?
-
-        wchar_ptr = FFI::MemoryPointer.new(:wchar_t, len)
-
-        len = MultiByteToWideChar(WIN32OLE::CP_UTF8, 0, string, -1, wchar_ptr, len)
-         
-        wchar_string = if len.zero?
-          nil
-        else
-          wchar_ptr.read_string(len * 2)
-        end
-        puts "len: #{len}, str len: #{wchar_string.size}"
-
-
+        # translate to punycode
+        punycode = FFI::MemoryPointer.new(:wchar_t, IDN_MAX_LENGTH)
+        punycode_len = IdnToAscii(0, wchar_ptr, -1, punycode, IDN_MAX_LENGTH)
         wchar_ptr.free
 
-        wchar_string.gsub!("\x00", "")
-      end
+        if punycode_len == 0
+          last_error = FFI::LastError.error
 
-      def self.wchar_to_utf8(string)
-        len = WideCharToMultiByte(WIN32OLE::CP_UTF8, 0, string, -1, nil, 0, nil, nil)
+          # operation completed successfully, hostname is not an IDN
+          # return hostname if last_error == 0
 
-        return if len.zero?
-
-        utf8_ptr = FFI::MemoryPointer.new(:char, len)
-
-        len = WideCharToMultiByte(WIN32OLE::CP_UTF8, 0, string, -1, utf8_ptr, len, nil, nil)
-         
-        utf8_string = if len.zero?
-          nil
-        else
-          utf8_ptr.read_string
+          message = case last_error
+          when ERROR_INSUFFICIENT_BUFFER
+            "The supplied buffer size was not large enough, or it was incorrectly set to NULL"
+          when ERROR_INVALID_FLAGS
+            "The values supplied for flags were not valid"
+          when ERROR_INVALID_NAME
+            "An invalid name was supplied to the function"
+          when ERROR_INVALID_PARAMETER
+            "Any of the parameter values was invalid"
+          when ERROR_NO_UNICODE_TRANSLATION
+            "An invalid Unicode was found in a string"
+          else
+            "Failed to convert \"#{hostname}\"; (error: #{last_error})" \
+              "\n\nhttps://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes#system-error-codes-1"
+          end
+          punycode.free
+          raise Error, message
         end
 
-
-        utf8_ptr.free
-
-        utf8_string
+        # turn to unicode
+        unicode_len = WideCharToMultiByte(WIN32OLE::CP_UTF8, 0, punycode, -1, nil, 0, nil, nil)
+        raise Error, "Failed to convert \"#{hostname}\" to utf8" if unicode_len.zero?
+        utf8_ptr = FFI::MemoryPointer.new(:char, unicode_len)
+        unicode_len = WideCharToMultiByte(WIN32OLE::CP_UTF8, 0, punycode, -1, utf8_ptr, unicode_len, nil, nil)
+        raise Error, "Failed to convert \"#{hostname}\" to utf8" if unicode_len.zero? 
+        unicode = utf8_ptr.read_string(utf8_ptr.size)
+        unicode.strip! # remove null-byte
       end
-
     else
       ffi_lib "libidn2"
 
