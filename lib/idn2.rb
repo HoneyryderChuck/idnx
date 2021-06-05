@@ -103,7 +103,11 @@ module Idn2
         unicode.strip! # remove null-byte
       end
     else
-      ffi_lib "libidn2"
+      if FFI::Platform.mac?
+        ffi_lib "libidn2.0"
+      else
+        ffi_lib "libidn2.so.0"
+      end
 
       attach_function :idn2_check_version, [], :int
 
