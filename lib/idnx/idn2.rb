@@ -5,12 +5,12 @@ module Idnx
     extend FFI::Library
 
     if FFI::Platform.mac?
-      ffi_lib "libidn2.0"
+      ffi_lib ["libidn2", "libidn2.0"]
     else
-      ffi_lib "libidn2.so.0"
+      ffi_lib ["libidn2.so", "libidn2.so.0"]
     end
 
-    attach_function :idn2_check_version, [], :int
+    attach_function :idn2_check_version, [], :string
 
     VERSION = idn2_check_version
 
@@ -20,7 +20,7 @@ module Idnx
     IDN2_TRANSITIONAL = 4
     IDN2_NONTRANSITIONAL = 8
 
-    FLAGS = if VERSION >= 0x00140000
+    FLAGS = if Gem::Version.new(VERSION) >= Gem::Version.new("0.14.0")
       IDN2_NFC_INPUT | IDN2_NONTRANSITIONAL
     else
       IDN2_NFC_INPUT
