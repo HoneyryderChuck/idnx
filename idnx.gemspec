@@ -8,13 +8,14 @@ Gem::Specification.new do |spec|
   spec.authors = ["HoneyryderChuck"]
   spec.email = ["cardoso_tiago@hotmail.com"]
 
-  DESCRIPTION = <<-DESC
+  spec.summary = <<-DESC
     Converts International Domain Names into Punycode.
-
     It uses (via FFI) 'libidn2' for Mac and Linux; for Windows, it uses native APIs.
   DESC
-  spec.summary = DESCRIPTION
-  spec.description = DESCRIPTION
+  spec.description = <<-DESC
+    Converts International Domain Names into Punycode.
+    It uses (via FFI) 'libidn2' for Mac and Linux; for Windows, it uses native APIs.
+  DESC
   spec.homepage = "https://github.com/honeyryderchuck/idnx"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.1.0")
 

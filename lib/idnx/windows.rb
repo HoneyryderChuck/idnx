@@ -1,4 +1,6 @@
-require 'win32ole'
+# frozen_string_literal: true
+
+require "win32ole"
 
 module Idnx
   module Lib
@@ -92,7 +94,7 @@ module Idnx
       raise Error, "Failed to convert \"#{hostname}\" to utf8" if unicode_len.zero?
       utf8_ptr = FFI::MemoryPointer.new(:char, unicode_len)
       unicode_len = WideCharToMultiByte(WIN32OLE::CP_UTF8, 0, punycode, -1, utf8_ptr, unicode_len, nil, nil)
-      raise Error, "Failed to convert \"#{hostname}\" to utf8" if unicode_len.zero? 
+      raise Error, "Failed to convert \"#{hostname}\" to utf8" if unicode_len.zero?
       unicode = utf8_ptr.read_string(utf8_ptr.size)
       unicode.strip! # remove null-byte
     end
