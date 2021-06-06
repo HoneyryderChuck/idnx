@@ -1,16 +1,21 @@
 # frozen_string_literal: true
 
-require_relative "lib/idn2/version"
+require_relative "lib/idnx/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "idn2"
-  spec.version = Idn2::VERSION
+  spec.name = "idnx"
+  spec.version = Idnx::VERSION
   spec.authors = ["HoneyryderChuck"]
   spec.email = ["cardoso_tiago@hotmail.com"]
 
-  spec.summary = "Ruby bindings for libidn2."
-  spec.description = "Ruby bindings for libidn2."
-  spec.homepage = "https://gitlab.com/honeyryderchuck/ruby-idn2"
+  DESCRIPTION = <<-DESC
+    Converts International Domain Names into Punycode.
+
+    It uses (via FFI) 'libidn2' for Mac and Linux; for Windows, it uses native APIs.
+  DESC
+  spec.summary = DESCRIPTION
+  spec.description = DESCRIPTION
+  spec.homepage = "https://github.com/honeyryderchuck/idnx"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.1.0")
 
   spec.metadata["homepage_uri"] = spec.homepage

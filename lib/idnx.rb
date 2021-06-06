@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative "idn2/version"
+require_relative "idnx/version"
 require "ffi"
 
-module Idn2
+module Idnx
   Error = Class.new(StandardError)
 
   module Lib
