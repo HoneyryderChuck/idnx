@@ -12,5 +12,5 @@ gem "pry"
 gem "pry-byebug" unless RUBY_PLATFORM.match?(/mingw/) || RUBY_ENGINE != "ruby"
 
 platform :jruby do
-  gem "win32ole"
+  gem "win32ole" if RUBY_PLATFORM.match?(/mingw/)
 end
