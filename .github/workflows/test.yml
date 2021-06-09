@@ -17,7 +17,11 @@ jobs:
           - "2.6"
           - "2.5"
           - "2.4"
-          - "jruby-9.2"
+          - "jruby-head"
+          - "truffleruby-head"
+        exclude:
+          - os: windows
+            ruby: truffleruby-head
     steps:
       - name: repo checkout
         uses: actions/checkout@v2
@@ -39,3 +43,4 @@ jobs:
 
       - name: test
         run:  bundle exec rake test
+        continue-on-error: ${{ matrix.ruby == 'jruby-head' }}
