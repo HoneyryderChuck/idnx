@@ -8,7 +8,7 @@ module Idnx
 
   module_function
 
-  def convert(hostname)
+  def to_punycode(hostname)
     Lib.lookup(hostname)
   end
 end
