@@ -10,3 +10,7 @@ gem "minitest", "~> 5.0"
 gem "standard"
 gem "pry"
 gem "pry-byebug" unless RUBY_PLATFORM.match?(/mingw/) || RUBY_ENGINE != "ruby"
+
+platform :jruby do
+  gem "win32ole"
+end
