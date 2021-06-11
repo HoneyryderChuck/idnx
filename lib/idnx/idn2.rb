@@ -10,9 +10,9 @@ module Idnx
       ffi_lib ["libidn2.so", "libidn2.so.0"]
     end
 
-    attach_function :idn2_check_version, [], :string
+    attach_function :idn2_check_version, [:string], :string
 
-    VERSION = idn2_check_version
+    VERSION = idn2_check_version(nil)
 
     IDN2_OK = 0
 
