@@ -1,10 +1,23 @@
-# Ruby::Idnx
+# Idnx
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/idnx`. To experiment with that code, run `bin/console` for an interactive prompt.
 
-TODO: Delete this and the text above, and describe your gem
+`idnx` provides a Ruby API for decoding Internationalized domain names into Punycode.
+
+It provides multi-platform support by using the most approriate strategy based on the target environment:
+
+* It uses (and requires the installation of) [libidn2](https://github.com/libidn/libidn2) in Linux / MacOS;
+* It uses [the appropriate winnls APIs](https://docs.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-idntoascii) in Windows;
 
 ## Installation
+
+If you're on Linux or Mac OS, you'll have to install `libidn2` first:
+
+```
+# Mac OS
+> brew install libidn2
+# Ubuntu, as an example
+> apt-get install idn2
+```
 
 Add this line to your application's Gemfile:
 
@@ -22,20 +35,17 @@ Or install it yourself as:
 
 ## Usage
 
-Make sure you have `libidn2` installed in your system:
+```ruby
+require "idnx"
 
-* Mac OS: `brew install libidn2`
-* Debian: `apt-get install idn2`
-
-For Windows, you don't need to do anything.
-
-TODO: Write usage instructions here
+Idnx.to_punycode("bücher.de") #=> "xn--bcher-kva.de"
+```
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+If you want to contribute, fork this project, and submit changes via a PR on github.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+For running tests, you can run `rake test`.
 
 ## Contributing
 
