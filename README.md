@@ -41,6 +41,10 @@ require "idnx"
 Idnx.to_punycode("bücher.de") #=> "xn--bcher-kva.de"
 ```
 
+## Ruby Support Policy
+
+This library supports at least ruby 2.4 .It also supports both JRuby and Truffleruby.
+
 ## Development
 
 If you want to contribute, fork this project, and submit changes via a PR on github.
