@@ -1,5 +1,8 @@
 # Idnx
 
+[![CI](https://github.com/HoneyryderChuck/idnx/actions/workflows/test.yml/badge.svg)](https://github.com/HoneyryderChuck/idnx/actions/workflows/test.yml)
+
+
 
 `idnx` provides a Ruby API for decoding Internationalized domain names into Punycode.
 
