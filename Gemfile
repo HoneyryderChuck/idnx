@@ -9,8 +9,8 @@ gem "rake", "~> 13.0"
 gem "minitest", "~> 5.0"
 gem "standard"
 gem "pry"
-gem "pry-byebug" unless RUBY_PLATFORM.match?(/mingw/) || RUBY_ENGINE != "ruby"
+gem "pry-byebug" unless Gem.win_platform? || RUBY_ENGINE != "ruby"
 
 platform :jruby do
-  gem "win32ole" if RUBY_PLATFORM.match?(/mingw/)
+  gem "jruby-win32ole" if Gem.win_platform?
 end
