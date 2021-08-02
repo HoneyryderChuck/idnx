@@ -48,6 +48,12 @@ Idnx.to_punycode("bücher.de") #=> "xn--bcher-kva.de"
 
 This library supports at least ruby 2.4 .It also supports both JRuby and Truffleruby.
 
+## Known Issues
+
+### JRuby on MacOS
+
+`idnx` won't work in MacOS when using JRuby 9.2 or lower, due to jruby FFI not having the same path lookup logic than it's counterpart for CRuby, thereby not finding `brew`-installed `libidn2`. This has been fixed since JRuby 9.3 .
+
 ## Development
 
 If you want to contribute, fork this project, and submit changes via a PR on github.
