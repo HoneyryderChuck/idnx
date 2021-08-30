@@ -21,12 +21,12 @@ module Idnx
     IDN2_NONTRANSITIONAL = 8
 
     FLAGS = if Gem::Version.new(VERSION) >= Gem::Version.new("0.14.0")
-      IDN2_NFC_INPUT | IDN2_NONTRANSITIONAL
-    else
-      IDN2_NFC_INPUT
-    end
+              IDN2_NFC_INPUT | IDN2_NONTRANSITIONAL
+            else
+              IDN2_NFC_INPUT
+            end
 
-    attach_function :idn2_lookup_ul, [:string, :pointer, :int], :int
+    attach_function :idn2_lookup_ul, %i[string pointer int], :int
     attach_function :idn2_strerror, [:int], :string
     attach_function :idn2_free, [:pointer], :void
 
@@ -36,9 +36,7 @@ module Idnx
       string_ptr = FFI::MemoryPointer.new(:pointer)
       result = idn2_lookup_ul(hostname, string_ptr, FLAGS)
 
-      if result != IDN2_OK
-        result = idn2_lookup_ul(hostname, string_ptr, IDN2_TRANSITIONAL)
-      end
+      result = idn2_lookup_ul(hostname, string_ptr, IDN2_TRANSITIONAL) if result != IDN2_OK
 
       if result != IDN2_OK
         string_ptr.free
