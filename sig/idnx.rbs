@@ -1,0 +1,12 @@
+module Idnx
+  VERSION: String
+
+  class Error < StandardError
+  end
+
+  def self?.to_punycode: (String hostname) -> String
+
+  module Lib
+    def self?.lookup: (String hostname) -> String
+  end
+end

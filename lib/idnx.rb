@@ -4,7 +4,7 @@ require_relative "idnx/version"
 require "ffi"
 
 module Idnx
-  Error = Class.new(StandardError)
+  class Error < StandardError; end
 
   module_function
 
