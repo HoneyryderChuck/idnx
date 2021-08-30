@@ -13,7 +13,7 @@ require "rubocop/rake_task"
 
 RuboCop::RakeTask.new
 
-if RUBY_VERSION > "3.0.0"
+if RUBY_VERSION > "3.0.0" && !Gem.win_platform?
   task :type_check do
     # Steep doesn't provide Rake integration yet,
     # but can do that ourselves
