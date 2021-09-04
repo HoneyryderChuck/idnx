@@ -10,6 +10,7 @@ It provides multi-platform support by using the most approriate strategy based o
 
 * It uses (and requires the installation of) [libidn2](https://github.com/libidn/libidn2) in Linux / MacOS;
 * It uses [the appropriate winnls APIs](https://docs.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-idntoascii) in Windows;
+* It falls back to a pure ruby Punycode 2003 implementation;
 
 ## Installation
 

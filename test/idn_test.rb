@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "idnx/ruby"
 
 class IdnTest < Minitest::Test
   def test_to_punycode
@@ -21,5 +22,11 @@ class IdnTest < Minitest::Test
       Idnx.to_punycode("ü" * 2000)
     end
     assert error_pattern =~ error.message, "expect \"#{error.message}\" to contain \"#{error_pattern}\""
+  end
+
+  def test_native_lookup
+    idnname = Idnx::Ruby.lookup("bücher.ch")
+
+    assert idnname == "xn--bcher-kva.ch", "waiting for idn version, instead got '#{idnname}'"
   end
 end
