@@ -191,7 +191,7 @@
    limitations under the License.
 
 
-* lib/httpx/domain_name.rb
+* lib/idnx/ruby.rb
 
 This file is derived from the implementation of punycode available at
 here:

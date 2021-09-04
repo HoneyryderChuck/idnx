@@ -16,5 +16,11 @@ end
 if FFI::Platform.windows?
   require "idnx/windows"
 else
-  require "idnx/idn2"
+  begin
+    require "idnx/idn2"
+  rescue LoadError
+    # fallback to pure ruby punycode 2003 implementation
+    require "idnx/ruby"
+    Idnx::Lib = Idnx::Ruby
+  end
 end

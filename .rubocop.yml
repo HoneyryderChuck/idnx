@@ -1,6 +1,13 @@
 AllCops:
   TargetRubyVersion: 2.5
   NewCops: enable
+  Include:
+    - lib/**/*.rb
+    - test/**/*.rb
+  Exclude:
+    - 'lib/idnx/ruby.rb'
+    - '.bundle/**/*'
+    - 'vendor/**/*'
 
 Style/StringLiterals:
   Enabled: true
