@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.metadata["source_code_uri"] = spec.homepage
   spec.metadata["changelog_uri"] = "#{spec.homepage}/-/blob/master/CHANGELOG.md"
 
-  spec.files = Dir["LICENSE.txt", "README.md", "lib/**/*.rb"]
+  spec.files = Dir["LICENSE.txt", "README.md", "CHANGELOG.md", "sig/**/*.rbs", "lib/**/*.rb"]
   spec.extra_rdoc_files = Dir["LICENSE.txt", "README.md"]
 
   spec.require_paths = ["lib"]
