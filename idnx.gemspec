@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
   spec.metadata["changelog_uri"] = "#{spec.homepage}/-/blob/master/CHANGELOG.md"
+  spec.license = "Apache 2.0"
 
   spec.files = Dir["LICENSE.txt", "README.md", "CHANGELOG.md", "sig/**/*.rbs", "lib/**/*.rb"]
   spec.extra_rdoc_files = Dir["LICENSE.txt", "README.md"]
