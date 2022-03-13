@@ -18,9 +18,14 @@ jobs:
           - "2.6"
           - "2.5"
           - "2.4"
+          - "head"
+          - "jruby"
           - "jruby-head"
+          - "truffleruby"
           - "truffleruby-head"
         exclude:
+          - os: windows-latest
+            ruby: truffleruby
           - os: windows-latest
             ruby: truffleruby-head
     steps:
@@ -44,3 +49,4 @@ jobs:
 
       - name: test
         run:  bundle exec rake
+        continue-on-error: ${{ matrix.ruby == 'head' || matrix.ruby == 'jruby-head' || matrix.ruby == 'truffleruby-head' }}
