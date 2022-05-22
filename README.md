@@ -1,5 +1,6 @@
 # Idnx
 
+[![Gem Version](https://badge.fury.io/rb/idnx.svg)](http://rubygems.org/gems/idnx)
 [![CI](https://github.com/HoneyryderChuck/idnx/actions/workflows/test.yml/badge.svg)](https://github.com/HoneyryderChuck/idnx/actions/workflows/test.yml)
 
 
