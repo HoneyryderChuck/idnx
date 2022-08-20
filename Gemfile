@@ -8,13 +8,14 @@ gemspec
 if RUBY_VERSION >= "3.0.0" && RUBY_ENGINE == "ruby"
   gem "rbs"
   gem "steep"
+  gem "debug"
 end
 
 gem "minitest", "~> 5.0"
-gem "pry"
-gem "pry-byebug" unless Gem.win_platform? || RUBY_ENGINE != "ruby"
 gem "rake", "~> 13.0"
 gem "standard"
+gem "rubocop-performance"
+gem "rubocop-thread_safety"
 
 platform :jruby do
   gem "jruby-win32ole" if Gem.win_platform?
