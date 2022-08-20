@@ -49,4 +49,4 @@ jobs:
 
       - name: test
         run:  bundle exec rake
-        continue-on-error: ${{ matrix.ruby == 'head' || matrix.ruby == 'jruby-head' || matrix.ruby == 'truffleruby-head' }}
+        continue-on-error: ${{ matrix.os == 'windows-latest' || matrix.ruby == 'head' || matrix.ruby == 'jruby-head' || matrix.ruby == 'truffleruby-head' }}
