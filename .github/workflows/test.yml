@@ -66,3 +66,35 @@ jobs:
           path: coverage/
           include-hidden-files: true
 
+  coverage:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4
+          bundler-cache: true
+
+      - name: Download coverage results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage-*
+          path: coverage
+
+      - name: coverage
+        env:
+          CI: 1
+        run: |
+          find coverage -name "*resultset.json" -exec sed -i 's?${{ github.workspace }}?'`pwd`'?' {} \;
+          bundle exec rake coverage:report
+
+      - uses: joshmfrankel/simplecov-check-action@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}

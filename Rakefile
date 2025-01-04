@@ -13,6 +13,18 @@ require "rubocop/rake_task"
 
 RuboCop::RakeTask.new
 
+namespace :coverage do
+  desc "Aggregates coverage reports"
+  task :report do
+    return unless ENV.key?("CI")
+
+    require "simplecov"
+
+    puts Dir["coverage/**/.resultset.json"].inspect
+    SimpleCov.collate Dir["coverage/**/.resultset.json"]
+  end
+end
+
 if RUBY_ENGINE == "ruby" && RUBY_VERSION > "3.0.0" && !Gem.win_platform?
   task :type_check do
     # Steep doesn't provide Rake integration yet,
