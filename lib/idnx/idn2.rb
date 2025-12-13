@@ -5,6 +5,14 @@ module Idnx
     extend FFI::Library
 
     if FFI::Platform.mac?
+      # Essential, safe fix to unpatched ffi configuration management design error for brew in alternate locations.
+      if (prefix = ::ENV.fetch("HOMEBREW_PREFIX", nil))
+        lib = ::File.join(prefix, "lib")
+        unless (orig_value = ::FFI::DynamicLibrary::SEARCH_PATH).include?(lib)
+          ::FFI::DynamicLibrary.send(:remove_const, :SEARCH_PATH) # Necessary to avoid redefinition warning.
+          ::FFI::DynamicLibrary::SEARCH_PATH = orig_value.dup.unshift(lib).freeze
+        end
+      end
       ffi_lib ["libidn2", "libidn2.0"]
     else
       ffi_lib ["libidn2.so", "libidn2.so.0"]
