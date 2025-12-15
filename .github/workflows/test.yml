@@ -66,6 +66,14 @@ jobs:
         run:  bundle exec rake rubocop
         if: matrix.ruby == '3.4'
 
-      - name: rbs runtime check
-        run:  bundle exec rbs -r ffi test --target "Idnx*" rake test
+      - name: rbs collection
+        run:  bundle exec rbs collection install
+        if: matrix.ruby == '3.4'
+
+      - name: runtime type check
+        run: bundle exec rbs -r ffi test --target "Idnx*" rake test
+        if: matrix.ruby == '3.4'
+
+      - name: static type check
+        run: bundle exec steep check
         if: matrix.ruby == '3.4'
