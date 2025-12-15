@@ -55,5 +55,13 @@ jobs:
         run:  brew install libidn2
 
       - name: test
-        run:  bundle exec rake
+        run:  bundle exec rake test
         continue-on-error: ${{ matrix.os == 'windows-latest' || matrix.ruby == 'head' || matrix.ruby == 'jruby-head' || matrix.ruby == 'truffleruby-head' }}
+
+      - name: lint
+        run:  bundle exec rake rubocop
+        if: matrix.ruby == '3.4'
+
+      - name: rbs runtime check
+        run:  bundle exec rbs -r ffi test --target "Idnx*" rake test
+        if: matrix.ruby == '3.4'
