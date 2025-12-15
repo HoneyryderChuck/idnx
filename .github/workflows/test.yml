@@ -54,6 +54,10 @@ jobs:
         if: matrix.os == 'macos-latest'
         run:  brew install libidn2
 
+      - name: install dev tools
+        if: matrix.os == 'windows-latest'
+        run:  choco install make mingw
+
       - name: test
         run:  bundle exec rake test
         continue-on-error: ${{ matrix.os == 'windows-latest' || matrix.ruby == 'head' || matrix.ruby == 'jruby-head' || matrix.ruby == 'truffleruby-head' }}
