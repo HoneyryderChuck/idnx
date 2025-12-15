@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Idnx
-  module Lib
+  module Idn2
     extend FFI::Library
 
     if FFI::Platform.mac?
@@ -55,4 +55,6 @@ module Idnx
       ascii
     end
   end
+
+  Lib = Idn2
 end
