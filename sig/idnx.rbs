@@ -4,9 +4,94 @@ module Idnx
   class Error < StandardError
   end
 
+  module Idn2
+    extend FFI::Library
+
+    VERSION: String
+    IDN2_OK: Integer
+    IDN2_NFC_INPUT: Integer
+    IDN2_TRANSITIONAL: Integer
+    IDN2_NONTRANSITIONAL: Integer
+
+    FLAGS: Integer
+
+    def self?.lookup: (String hostname) -> String
+
+    def self?.idn2_lookup_ul: (String hostname, FFI::Pointer?, Integer flags) -> Integer
+
+
+    def self?.idn2_strerror: (Integer code) -> String
+
+    def self?.idn2_free: (FFI::Pointer?) -> void
+
+    def self?.idn2_check_version: (FFI::Pointer?) -> void
+  end
+
+  module Windows
+    extend FFI::Library
+
+    IDN_MAX_LENGTH: Integer
+    MB_ERR_INVALID_CHARS: Integer
+
+    ERROR_INSUFFICIENT_BUFFER: Integer
+    ERROR_INVALID_FLAGS: Integer
+    ERROR_INVALID_NAME: Integer
+    ERROR_INVALID_PARAMETER: Integer
+    ERROR_NO_UNICODE_TRANSLATION: Integer
+
+    def self?.lookup: (String hostname) -> String
+
+    def self?.IdnToAscii: (Integer, FFI::Pointer?, Integer, FFI::Pointer?, Integer) -> Integer
+
+    def self?.MultiByteToWideChar: (Integer, Integer, String, Integer, FFI::Pointer?, Integer) -> Integer
+
+    def self?.WideCharToMultiByte: (Integer, Integer, FFI::Pointer?, Integer, FFI::Pointer?, Integer, FFI::Pointer?, FFI::Pointer?) -> Integer
+  end
+
+  module Ruby
+    def self?.lookup: (String hostname) -> String
+
+    module Punycode
+      BASE: Integer
+      TMIN: Integer
+      TMAX: Integer
+      SKEW: Integer
+      DAMP: Integer
+      INITIAL_BIAS: Integer
+      INITIAL_N: Integer
+      DELIMITER: String
+
+      MAXINT: Integer
+
+      LOBASE: Integer
+      CUTOFF: Integer
+
+      RE_NONBASIC: Regexp
+
+      DECODE_DIGIT: Hash[Integer, Integer]
+
+      ENCODE_DIGIT: ^(Integer d, bool flag) -> String
+
+      DOT: String
+      PREFIX: String
+
+      class ArgumentError < ::ArgumentError
+      end
+
+      class BufferOverflowError < ArgumentError
+      end
+
+      def self?.encode: (String string) -> String
+
+      def self?.encode_hostname: (String hostname) -> String
+
+      def self?.decode: (String hostname) -> String
+
+      def self?.decode_hostname: (String hostname) -> String
+    end
+  end
+
   def self?.to_punycode: (String hostname) -> String
 
-  module Lib
-    def self?.lookup: (String hostname) -> String
-  end
+  LIB: singleton(Idn2) | singleton(Windows) | singleton(Ruby)
 end
