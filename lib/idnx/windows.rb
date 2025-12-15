@@ -100,8 +100,9 @@ module Idnx
 
       unicode = utf8_ptr.read_string(utf8_ptr.size)
       unicode.strip! # remove null-byte
+      unicode
     end
   end
 
-  Lib = Windows
+  LIB = Windows
 end

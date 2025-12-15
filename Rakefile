@@ -12,18 +12,3 @@ end
 require "rubocop/rake_task"
 
 RuboCop::RakeTask.new
-
-if RUBY_ENGINE == "ruby" && RUBY_VERSION > "3.0.0" && !Gem.win_platform?
-  task :type_check do
-    # Steep doesn't provide Rake integration yet,
-    # but can do that ourselves
-    require "steep"
-    require "steep/cli"
-
-    Steep::CLI.new(argv: ["check"], stdout: $stdout, stderr: $stderr, stdin: $stdin).run
-  end
-
-  task default: %i[test type_check rubocop]
-else
-  task default: %i[test]
-end

@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
   spec.metadata["changelog_uri"] = "#{spec.homepage}/-/blob/master/CHANGELOG.md"
+  spec.metadata["rubygems_mfa_required"] = "true"
   spec.license = "Apache 2.0"
 
   spec.files = Dir["LICENSE.txt", "README.md", "CHANGELOG.md", "sig/**/*.rbs", "lib/**/*.rb"]
@@ -31,6 +32,7 @@ Gem::Specification.new do |spec|
 
   # Uncomment to register a new dependency of your gem
   spec.add_dependency "ffi", ["~> 1.12"]
+  spec.add_dependency "win32ole" if Gem.win_platform? && RUBY_ENGINE != "jruby"
 
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html

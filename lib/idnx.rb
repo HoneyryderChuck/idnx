@@ -9,7 +9,7 @@ module Idnx
   module_function
 
   def to_punycode(hostname)
-    Lib.lookup(hostname)
+    LIB.lookup(hostname)
   end
 end
 
@@ -21,6 +21,6 @@ else
   rescue LoadError
     # fallback to pure ruby punycode 2003 implementation
     require "idnx/ruby"
-    Lib = Ruby
+    LIB = Ruby
   end
 end

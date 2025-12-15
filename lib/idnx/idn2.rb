@@ -56,5 +56,5 @@ module Idnx
     end
   end
 
-  Lib = Idn2
+  LIB = Idn2
 end

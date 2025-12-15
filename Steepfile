@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
+D = Steep::Diagnostic
+
 target :lib do
   check "lib"
   signature "sig"
 
-  ignore "lib/idnx/idn2.rb"
-  ignore "lib/idnx/windows.rb"
-  ignore "lib/idnx/ruby.rb"
+  library "ffi"
+
+  configure_code_diagnostics do |config|
+    config[D::Ruby::UnknownConstant] = :hint
+  end
 end

@@ -78,12 +78,14 @@ module Idnx
       # Returns the numeric value of a basic code point (for use in
       # representing integers) in the range 0 to base-1, or nil if cp
       # is does not represent a value.
-      DECODE_DIGIT = {}.tap do |map|
+      DECODE_DIGIT = begin
+        map = {} #: Hash[Integer, Integer]
         # ASCII A..Z map to 0..25
         # ASCII a..z map to 0..25
         (0..25).each { |i| map[65 + i] = map[97 + i] = i }
         # ASCII 0..9 map to 26..35
         (26..35).each { |i| map[22 + i] = i }
+        map
       end
 
       # Returns the basic code point whose value (when used for
@@ -109,7 +111,7 @@ module Idnx
 
       # Encode a +string+ in Punycode
       def encode(string)
-        input = string.unpack("U*")
+        input = string.unpack("U*") #: Array[Integer]
         output = +""
 
         # Initialize the state
@@ -210,7 +212,7 @@ module Idnx
         bias = INITIAL_BIAS
 
         if j = string.rindex(DELIMITER)
-          b = string[0...j]
+          b = string[0...j] #: String
 
           b.match(RE_NONBASIC) &&
             raise(ArgumentError, "Illegal character is found in basic part: #{string.inspect}")
@@ -218,17 +220,17 @@ module Idnx
           # Handle the basic code points
 
           output = b.unpack("U*")
-          u = string[(j + 1)..-1]
+          u = string[(j + 1)..-1] #: String
         else
-          output = []
-          u = string
+          output = [] #: Array[Integer]
+          u = string #: String
         end
 
         # Main decoding loop: Start just after the last delimiter if any
         # basic code points were copied; start at the beginning
         # otherwise.
 
-        input = u.unpack("C*")
+        input = u.unpack("C*") #: Array[Integer]
         input_length = input.length
         h = 0
         out = output.length
@@ -290,7 +292,9 @@ module Idnx
       # Decode a hostname using IDN/Punycode algorithms
       def decode_hostname(hostname)
         hostname.gsub(/(\A|#{Regexp.quote(DOT)})#{Regexp.quote(PREFIX)}([^#{Regexp.quote(DOT)}]*)/o) do
-          Regexp.last_match(1) << decode(Regexp.last_match(2))
+          match1 = Regexp.last_match(1) #: String
+          match2 = Regexp.last_match(2) #: String
+          match1 << decode(match2)
         end
       end
     end
