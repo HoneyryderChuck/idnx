@@ -21,7 +21,6 @@ else
   rescue LoadError
     # fallback to pure ruby punycode 2003 implementation
     require "idnx/ruby"
-    Idnx.send(:remove_const, :Lib)
-    Idnx::Lib = Idnx::Ruby
+    Lib = Ruby
   end
 end

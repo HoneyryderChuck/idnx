@@ -3,7 +3,7 @@
 require "win32ole"
 
 module Idnx
-  module Lib
+  module Windows
     extend FFI::Library
 
     ffi_lib "Normaliz.dll"
@@ -102,4 +102,6 @@ module Idnx
       unicode.strip! # remove null-byte
     end
   end
+
+  Lib = Windows
 end
