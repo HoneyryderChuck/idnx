@@ -2,7 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/idnx.svg)](http://rubygems.org/gems/idnx)
 [![CI](https://github.com/HoneyryderChuck/idnx/actions/workflows/test.yml/badge.svg)](https://github.com/HoneyryderChuck/idnx/actions/workflows/test.yml)
-
+[![coverage report](https://honeyryderchuck.github.io/idnx/merged/badge_total.svg)](https://honeyryderchuck.github.io/idnx/merged/#_AllFiles)
 
 
 `idnx` provides a Ruby API for decoding Internationalized domain names into Punycode.

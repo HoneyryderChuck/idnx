@@ -8,7 +8,7 @@ module Idnx
       Punycode.encode_hostname(hostname)
     end
 
-    # :nocov:
+    # simplecov:disable
     # -*- coding: utf-8 -*-
     #--
     # punycode.rb - PunyCode encoder for the Domain Name library
@@ -298,6 +298,6 @@ module Idnx
         end
       end
     end
-    # :nocov:
+    # simplecov:enable
   end
 end
