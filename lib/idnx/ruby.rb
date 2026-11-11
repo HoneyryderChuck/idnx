@@ -8,7 +8,6 @@ module Idnx
       Punycode.encode_hostname(hostname)
     end
 
-    # :nocov:
     # -*- coding: utf-8 -*-
     #--
     # punycode.rb - PunyCode encoder for the Domain Name library
@@ -203,101 +202,6 @@ module Idnx
           end
         end.join(DOT)
       end
-
-      # Decode a +string+ encoded in Punycode
-      def decode(string)
-        # Initialize the state
-        n = INITIAL_N
-        i = 0
-        bias = INITIAL_BIAS
-
-        if j = string.rindex(DELIMITER)
-          b = string[0...j] #: String
-
-          b.match(RE_NONBASIC) &&
-            raise(ArgumentError, "Illegal character is found in basic part: #{string.inspect}")
-
-          # Handle the basic code points
-
-          output = b.unpack("U*")
-          u = string[(j + 1)..-1] #: String
-        else
-          output = [] #: Array[Integer]
-          u = string #: String
-        end
-
-        # Main decoding loop: Start just after the last delimiter if any
-        # basic code points were copied; start at the beginning
-        # otherwise.
-
-        input = u.unpack("C*") #: Array[Integer]
-        input_length = input.length
-        h = 0
-        out = output.length
-
-        while h < input_length
-          # Decode a generalized variable-length integer into delta,
-          # which gets added to i.  The overflow checking is easier
-          # if we increase i as we go, then subtract off its starting
-          # value at the end to obtain delta.
-
-          oldi = i
-          w = 1
-          k = BASE
-
-          loop do
-            (digit = DECODE_DIGIT[input[h]]) ||
-              raise(ArgumentError, "Illegal character is found in non-basic part: #{string.inspect}")
-            h += 1
-            i += digit * w
-            raise BufferOverflowError if i > MAXINT
-
-            t = k <= bias ? TMIN : k - bias >= TMAX ? TMAX : k - bias
-            break if digit < t
-
-            w *= BASE - t
-            raise BufferOverflowError if w > MAXINT
-
-            k += BASE
-            (h < input_length) || raise(ArgumentError, "Malformed input given: #{string.inspect}")
-          end
-
-          # Adapt the bias
-          delta = oldi == 0 ? i / DAMP : (i - oldi) >> 1
-          delta += delta / (out + 1)
-          bias = 0
-          while delta > CUTOFF
-            delta /= LOBASE
-            bias += BASE
-          end
-          bias += (LOBASE + 1) * delta / (delta + SKEW)
-
-          # i was supposed to wrap around from out+1 to 0, incrementing
-          # n each time, so we'll fix that now:
-
-          q, i = i.divmod(out + 1)
-          n += q
-          raise BufferOverflowError if n > MAXINT
-
-          # Insert n at position i of the output:
-
-          output[i, 0] = n
-
-          out += 1
-          i += 1
-        end
-        output.pack("U*")
-      end
-
-      # Decode a hostname using IDN/Punycode algorithms
-      def decode_hostname(hostname)
-        hostname.gsub(/(\A|#{Regexp.quote(DOT)})#{Regexp.quote(PREFIX)}([^#{Regexp.quote(DOT)}]*)/o) do
-          match1 = Regexp.last_match(1) #: String
-          match2 = Regexp.last_match(2) #: String
-          match1 << decode(match2)
-        end
-      end
     end
-    # :nocov:
   end
 end

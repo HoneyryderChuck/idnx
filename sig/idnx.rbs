@@ -84,10 +84,6 @@ module Idnx
       def self?.encode: (String string) -> String
 
       def self?.encode_hostname: (String hostname) -> String
-
-      def self?.decode: (String hostname) -> String
-
-      def self?.decode_hostname: (String hostname) -> String
     end
   end
 
