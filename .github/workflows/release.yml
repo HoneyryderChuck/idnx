@@ -2,8 +2,6 @@ name: Release
 
 on:
   push:
-    branches:
-      - master
     paths:
       - lib/idnx/version.rb
   workflow_dispatch:
