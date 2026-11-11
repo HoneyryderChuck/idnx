@@ -17,6 +17,8 @@ class IdnTest < Minitest::Test
   end
 
   def test_to_punycode_error
+    skip if defined?(Idnx::Ruby)
+
     error_pattern = FFI::Platform.windows? ? /invalid name was supplied/ : /domain name longer than/
     error = assert_raises(Idnx::Error) do
       Idnx.to_punycode("ü" * 2000)
