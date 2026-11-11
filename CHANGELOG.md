@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## [0.1.2] - 2026-11-11
+
+* added missing license file.
+* skip warnings when falling back to pure ruby version.
+* remove pure ruby dead code for decoding.
+
 ## [0.1.1] - 2021-10-03
 
 Added missing RBS sig files to the gemspec.
